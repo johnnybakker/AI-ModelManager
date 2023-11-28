@@ -1,0 +1,39 @@
+name: Continuous integration and deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Substitute Secrets
+        uses: Lambdaspire/action-substitute-secrets-in-file@v1.0.0
+        with:
+          file: appsettings.json
+          tokenPattern: ${TOKEN}
+          secretsJson: ${{ toJSON(secrets) }}
+      - name: Setup .NET Core SDK 7.0.x
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 7.0.x
+      - name: Publish project
+        run: dotnet publish -c Release -o release --runtime linux-arm64 --self-contained
+
+      # name: Stopping service
+      # run:  sudo /bin/systemctl stop modelmanager
+
+      - name: Clean directory
+        run:  rm -f /var/www/AI-ModelManager/*
+
+      - name: Install
+        run:  mv -v release/* /var/www/AI-ModelManager/
+
+      # name: Starting service
+      # run:  sudo /bin/systemctl start modelmanager

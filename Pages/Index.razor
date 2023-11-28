@@ -1,0 +1,66 @@
+﻿@page "/Train"
+@inject IWebHostEnvironment hostEnvironment;
+
+<PageTitle>Index</PageTitle>
+
+<div class="container-fluid">
+
+<h1>Train a model</h1>
+
+<div class="form-group mt-4">
+	<label>Model:</label>
+	<select @onchange="SelectModel" @attributes="ControlAttributes()" class="form-control">
+		@foreach(var model in TrainService.ModelNames) {
+			<option value="@model">@model</option>
+		}
+	</select>
+</div>
+
+<div class="form-group mt-4">
+	<label>Train input:</label>
+	<select @onchange="SelectInput" @attributes="ControlAttributes()" class="form-control">
+		@foreach(var model in TrainService.Inputs) {
+			<option value="@model">@Path.GetFileNameWithoutExtension(model)</option>
+		}
+	</select>
+</div>
+
+<div class="form-group mt-4">
+	<label>Validation input:</label>
+	<select @onchange="SelectValidationInput" @attributes="ControlAttributes()" class="form-control">
+		@foreach(var model in TrainService.Inputs) {
+			<option value="@model">@Path.GetFileNameWithoutExtension(model)</option>
+		}
+	</select>
+</div>
+
+<div class="row mt-4">
+	@if(TrainService.IsTraining) {
+		<div class="col-12 col-md-4 col-lg-4 col-xl-3 flex-grow-1">
+			<div class="btn btn-danger d-block my-1" @onclick="Stop">Stop training model</div>
+		</div>
+	} else {
+		<div class="col-12 col-md-4 col-lg-4 col-xl-3 flex-grow-1">
+			<div class="btn btn-success d-block my-1" @onclick="Start">Start training</div>
+		</div>
+		
+		@if(TrainService.OutputPredictions != null) {
+			<div class="col-12 col-md-4 col-lg-4 col-xl-3 flex-grow-1">
+				<a href="@TrainService.OutputPredictions" class="btn btn-primary d-block my-1" download="">Download predictions</a>
+			</div>
+		}
+	}
+</div>
+
+<div class="form-group mt-4">
+	<h4>Output:</h4>
+	<code>
+		@if(TrainService.Output != null) {
+			@foreach(var line in TrainService.Output!) {
+				<span>@line<br/></span>
+			}
+		}
+	</code>
+</div>
+
+</div>

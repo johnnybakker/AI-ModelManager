@@ -1,0 +1,69 @@
+@page "/Result/{Training}"
+@inject IWebHostEnvironment hostEnvironment;
+
+<PageTitle>Result</PageTitle>
+
+<h1>Training: @Result.DateTime.ToString()</h1>
+
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+            @foreach(System.Data.DataColumn col in PredictionTable.Columns) {
+                <th>@col.ColumnName</th>
+			}
+		</tr>
+	</thead>
+	<tbody>
+		@for(int i = 0; i < 10; i++) {
+			<tr>
+				@foreach(System.Data.DataColumn col in PredictionTable.Columns) {
+					<td>@PredictionTable.Rows[i][col]</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div class="container-fluid">
+
+	<div class="row mt-4">
+
+		@if(Result.Models != null) {
+			@foreach(var line in Result.Models) {
+				<div class="col-12 col-md-4 col-lg-3 col-xl-3 flex-grow-1">
+					<a href="@line" class="btn btn-primary d-block my-1" download="">@Path.GetFileNameWithoutExtension(line)</a>
+				</div>
+			}
+		}
+
+		@if(Result.Scalers != null) {
+			@foreach(var line in Result.Scalers) {
+				<div class="col-12 col-md-4 col-lg-3 col-xl-3 flex-grow-1">
+					<a href="@line" class="btn btn-primary d-block my-1" download="">@Path.GetFileNameWithoutExtension(line)</a>
+				</div>
+			}
+		}
+
+
+		@if(TrainService.OutputPredictions != null) {
+			<div class="col-12 col-md-4 col-lg-4 col-xl-3 flex-grow-1">
+				<a href="@TrainService.OutputPredictions" class="btn btn-primary d-block my-1" download="">Download predictions</a>
+			</div>
+		}
+
+	</div>
+
+
+
+@if(Result.Images != null) {
+	<div class="row">
+		@foreach(var line in Result.Images!) {
+		<div class="col">
+			<img src=@(line) />
+		</div>
+		}
+	</div>
+}
+
+</div>

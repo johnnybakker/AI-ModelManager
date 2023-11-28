@@ -1,0 +1,19 @@
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 13758 entries, 0 to 13757
+Data columns (total 3 columns):
+ #   Column   Non-Null Count  Dtype  
+---  ------   --------------  -----  
+ 0   Density  13758 non-null  int64  
+ 1   OUT      13758 non-null  float64
+ 2   PV       13758 non-null  float64
+dtypes: float64(2), int64(1)
+memory usage: 322.6 KB
+            Density           OUT            PV
+count  13758.000000  13758.000000  13758.000000
+mean     438.227068     49.745497   8098.711614
+std       41.406418      9.513158   1353.453235
+min      344.000000     27.615849   4951.650879
+25%      416.000000     40.548207   6998.417969
+50%      432.000000     50.732775   8001.053711
+75%      456.000000     56.978065   8977.643799
+max      528.000000     71.733696  11172.511720

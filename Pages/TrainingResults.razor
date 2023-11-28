@@ -1,0 +1,47 @@
+@page "/"
+@page "/Results"
+@inject IWebHostEnvironment hostEnvironment;
+
+<PageTitle>Results</PageTitle>
+
+<h1>Results</h1>
+
+<table class="table table-striped">
+	<thead>
+
+		<tr>
+			<th>Date</th>
+			<th>Model</th>
+			<th>Scaler</th>
+			<th>Predictions</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var result in Results) {
+			<tr>
+				<td>
+					@result.DateTime.ToString()
+				</td>
+				<td>
+					@foreach(var model in result.Models) {
+						<a href="@model" download="" class="btn btn-link btn-sm">@Path.GetFileNameWithoutExtension(model)</a>
+					}
+				</td>	
+				<td>
+					@foreach(var model in result.Scalers) {
+						<a href="@model" download="" class="btn btn-link btn-sm">@Path.GetFileNameWithoutExtension(model)</a>
+					}
+				</td>				
+				<td>
+					<a href="@result.Predictions" download="" class="btn btn-link btn-sm">@Path.GetFileNameWithoutExtension(result.Predictions)</a>
+				</td>
+				<td>
+					<a href="/Result/@result.DateTime.Ticks" class="btn btn-primary btn-sm">Open</a>
+					<div @onclick="@(()=>DeleteResult(result.DateTime.Ticks))" class="btn btn-primary btn-sm">Delete</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+
+</table>

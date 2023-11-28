@@ -26,6 +26,9 @@ public class TrainService  {
 	public TrainService(IConfiguration Configuration, IHostEnvironment Environment) {
 		environment = Environment;
 		Configuration.GetSection("Trainer").Bind(options);
+		if(!Directory.Exists(OutputDirectoryTMP)) {
+			Directory.CreateDirectory(OutputDirectoryTMP);
+		}
 	}
 
 	public void Start(string model, string input, string validationInput) {

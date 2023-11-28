@@ -26,8 +26,8 @@ jobs:
       - name: Publish project
         run: dotnet publish -c Release -o release --runtime linux-arm64 --self-contained
 
-      # name: Stopping service
-      # run:  sudo /bin/systemctl stop modelmanager
+      - name: Stopping service
+        run:  sudo /bin/systemctl stop modelmanager
 
       - name: Clean directory
         run:  rm -f /var/www/AI-ModelManager/*
@@ -35,5 +35,5 @@ jobs:
       - name: Install
         run:  mv -v release/* /var/www/AI-ModelManager/
 
-      # name: Starting service
-      # run:  sudo /bin/systemctl start modelmanager
+      - name: Starting service
+        run:  sudo /bin/systemctl start modelmanager

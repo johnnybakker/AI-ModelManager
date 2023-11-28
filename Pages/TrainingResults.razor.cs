@@ -27,7 +27,8 @@ public partial class TrainingResults : ComponentBase {
 		return base.OnInitializedAsync();
 	}
 
-	public void DeleteResult(long result) {
-		Directory.Delete(Path.Combine(TrainService.OutputDirectoryTMP, result.ToString()));
+	public async Task DeleteResult(long result) {
+		Directory.Delete(Path.Combine(TrainService.OutputDirectoryTMP, result.ToString()), true);
+		await OnInitializedAsync();
 	}
 }

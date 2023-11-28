@@ -38,7 +38,7 @@
 				</td>
 				<td>
 					<a href="/Result/@result.DateTime.Ticks" class="btn btn-primary btn-sm">Open</a>
-					<div @onclick="@(()=>DeleteResult(result.DateTime.Ticks))" class="btn btn-primary btn-sm">Delete</div>
+					<div @onclick="@(async ()=> await DeleteResult(result.DateTime.Ticks))" class="btn btn-primary btn-sm">Delete</div>
 				</td>
 			</tr>
 		}

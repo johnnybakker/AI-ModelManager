@@ -9,6 +9,24 @@ public partial class Train : ComponentBase {
 	[Inject] 
 	private TrainService TrainService { get; set; } = null!;
 
+	public static long DirSize(DirectoryInfo d) 
+	{    
+		long size = 0;    
+		// Add file sizes.
+		FileInfo[] fis = d.GetFiles();
+		foreach (FileInfo fi in fis) 
+		{      
+			size += fi.Length;    
+		}
+		// Add subdirectory sizes.
+		DirectoryInfo[] dis = d.GetDirectories();
+		foreach (DirectoryInfo di in dis) 
+		{
+			size += DirSize(di);   
+		}
+		return size;  
+	}
+
 	public Dictionary<string,object> ControlAttributes() { 
 		Dictionary<string, object> attributes = new();
 		if(TrainService.IsTraining) attributes.Add("disabled", "disabled");
@@ -32,8 +50,16 @@ public partial class Train : ComponentBase {
 		InvokeAsync(StateHasChanged);
 	}
 
+	const long MAX_SIZE = (1024L * 1024L * 1024L * 10L);
+
 	private void Start()
     {
+		DirectoryInfo di = new(TrainService.OutputDirectoryTMP);
+		long size = DirSize(di);
+
+		if(size > MAX_SIZE) return;
+	
+
 		if(string.IsNullOrEmpty(SelectedModel)) return;
 		if(string.IsNullOrEmpty(SelectedInput)) return;
 		if(string.IsNullOrEmpty(SelectedValidationInput)) return;

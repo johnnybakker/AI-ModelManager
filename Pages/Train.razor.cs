@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace HillsModelManager.Pages;
 
-public partial class Index : ComponentBase {
+public partial class Train : ComponentBase {
 
 	[Inject] 
 	private TrainService TrainService { get; set; } = null!;

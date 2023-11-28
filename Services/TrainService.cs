@@ -75,6 +75,9 @@ public class TrainService  {
 			Path.Combine("/tmp/", TrainProcess.Name, "Predictions.csv") :
 			null;
 
+	public string? OutputName => 
+		TrainProcess != null && TrainProcess.Process.HasExited ? TrainProcess.Name : null;
+
 	public IEnumerable<string>? OutputModels => 
 		TrainProcess != null && TrainProcess.Process.HasExited ? 
 			Directory.GetFiles(Path.Combine(OutputDirectoryTMP, TrainProcess.Name), "*.pkl")

@@ -30,7 +30,7 @@ jobs:
         run:  sudo /bin/systemctl stop modelmanager
 
       - name: Clean directory
-        run:  rm -f /var/www/AI-ModelManager/*
+        run:  rm -f -R /var/www/AI-ModelManager/*
 
       - name: Install
         run:  mv -v release/* /var/www/AI-ModelManager/

@@ -12,7 +12,8 @@ public class TrainerFileOptions : StaticFileOptions {
 		RequestPath = new PathString("/trainer");
 		ContentTypeProvider = new FileExtensionContentTypeProvider(
 			new Dictionary<string, string>{
-				{ ".pkl","application/octet-stream"}
+				{ ".pkl","application/octet-stream"},
+				{ ".png", "image/png" },
 			}
 		);
 		DefaultContentType = "application/octet-stream";

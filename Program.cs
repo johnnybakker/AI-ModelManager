@@ -37,7 +37,8 @@ app.UseStaticFiles(new StaticFileOptions()
 {
 	ContentTypeProvider = new FileExtensionContentTypeProvider(
 		new Dictionary<string, string>{
-			{ ".pkl","application/octet-stream"}
+			{ ".pkl","application/octet-stream"},
+			{ ".png", "image/png" },
 		}
 	)
 });

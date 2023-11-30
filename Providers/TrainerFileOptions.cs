@@ -14,6 +14,7 @@ public class TrainerFileOptions : StaticFileOptions {
 			new Dictionary<string, string>{
 				{ ".pkl","application/octet-stream"},
 				{ ".png", "image/png" },
+				{ ".csv", "application/octet-stream" },
 			}
 		);
 		DefaultContentType = "application/octet-stream";

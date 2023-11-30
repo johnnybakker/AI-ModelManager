@@ -18,20 +18,12 @@
 
 <div class="form-group mt-4">
 	<label>Train input:</label>
-	<select @onchange="SelectInput" @attributes="ControlAttributes()" class="form-control">
-		@foreach(var model in TrainService.Inputs) {
-			<option value="@model">@Path.GetFileNameWithoutExtension(model)</option>
-		}
-	</select>
+	<InputFile class="form-control" OnChange="@LoadInputFile" />
 </div>
 
 <div class="form-group mt-4">
 	<label>Validation input:</label>
-	<select @onchange="SelectValidationInput" @attributes="ControlAttributes()" class="form-control">
-		@foreach(var model in TrainService.Inputs) {
-			<option value="@model">@Path.GetFileNameWithoutExtension(model)</option>
-		}
-	</select>
+	<InputFile class="form-control" OnChange="@LoadValidationFile" />
 </div>
 
 <div class="row mt-4">
@@ -45,7 +37,7 @@
 		</div>
 		
 		@if(TrainService.OutputName	!= null) {
-			@if(Path.Exists(Path.Combine(TrainService.OutputDirectoryTMP, TrainService.OutputName))) {
+			@if(Path.Exists(Path.Combine(TrainService.OutputDirectory, TrainService.OutputName))) {
 				<div class="col-12 col-md-4 col-lg-4 col-xl-3">
 					<a href="/Result/@TrainService.OutputName" class="btn btn-primary d-block my-1" @onclick="Start">Result</a>
 				</div>

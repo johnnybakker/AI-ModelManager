@@ -16,7 +16,7 @@ public partial class TrainingResult : ComponentBase {
  	[Parameter]
     public string Training { get; set; } = default!;
 
-	public TrainData Result => new(Path.Combine(TrainService.OutputDirectoryTMP, Training));
+	public TrainData Result => new(Path.Combine(TrainService.OutputDirectory, Training));
 	public DataTable PredictionTable = new();
 
 	protected override Task OnInitializedAsync()

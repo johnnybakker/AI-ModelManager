@@ -15,7 +15,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		@for(int i = 0; i < 10; i++) {
+
+		@for(int i = 0; i < (PredictionTable.Rows.Count > 10 ? 10 : PredictionTable.Rows.Count); i++) {
 			<tr>
 				@foreach(System.Data.DataColumn col in PredictionTable.Columns) {
 					<td>@PredictionTable.Rows[i][col]</td>

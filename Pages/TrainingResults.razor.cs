@@ -11,7 +11,7 @@ public partial class TrainingResults : ComponentBase {
 	private TrainService TrainService { get; set; } = null!;
 
 	public IEnumerable<string> TrainingPaths => 
-		Directory.GetDirectories(TrainService.OutputDirectoryTMP)
+		Directory.GetDirectories(TrainService.OutputDirectory)
 			.OrderDescending();
 
 
@@ -28,7 +28,7 @@ public partial class TrainingResults : ComponentBase {
 	}
 
 	public async Task DeleteResult(long result) {
-		Directory.Delete(Path.Combine(TrainService.OutputDirectoryTMP, result.ToString()), true);
+		Directory.Delete(Path.Combine(TrainService.OutputDirectory, result.ToString()), true);
 		await OnInitializedAsync();
 	}
 }

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using HillsModelManager.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace HillsModelManager.Pages;
 
@@ -36,8 +37,8 @@ public partial class Train : ComponentBase {
 	protected override Task OnInitializedAsync()
 	{
 		SelectedModel = TrainService.ModelNames.FirstOrDefault() ?? "";
-		SelectedInput = TrainService.Inputs.FirstOrDefault() ?? "";
-		SelectedValidationInput = SelectedInput;
+		validationFile = null;
+		inputFile = null;
 
 		TrainService.ProcessStarted += ProcessUpdated;
 		TrainService.ProcessDataReceived += ProcessUpdated;
@@ -52,43 +53,50 @@ public partial class Train : ComponentBase {
 
 	const long MAX_SIZE = (1024L * 1024L * 1024L * 10L);
 
-	private void Start()
+	private async void Start()
     {
-		DirectoryInfo di = new(TrainService.OutputDirectoryTMP);
+		DirectoryInfo di = new(TrainService.OutputDirectory);
 		long size = DirSize(di);
 
 		if(size > MAX_SIZE) return;
 	
 
 		if(string.IsNullOrEmpty(SelectedModel)) return;
-		if(string.IsNullOrEmpty(SelectedInput)) return;
-		if(string.IsNullOrEmpty(SelectedValidationInput)) return;
+		if(inputFile == null) return;
+		if(validationFile == null) return;
 
-		TrainService.Start(SelectedModel, SelectedInput, SelectedValidationInput);	
+		await TrainService.Start(
+			SelectedModel, 
+			inputFile.OpenReadStream(MAX_SIZE), 
+			validationFile.OpenReadStream(MAX_SIZE)
+		);	
     }
-
 
 	private void Stop()
     {
 		TrainService.Stop();
 	}
 
+	IBrowserFile? inputFile = null;
+    private void LoadInputFile(InputFileChangeEventArgs e)
+    {
+		inputFile = e.File;
+		Console.WriteLine(inputFile.Size);
+		Console.WriteLine(inputFile.Name);
+    }
+
+	IBrowserFile? validationFile = null;
+    private void LoadValidationFile(InputFileChangeEventArgs e)
+    {
+		validationFile = e.File;
+		Console.WriteLine(validationFile.Size);
+		Console.WriteLine(validationFile.Name);
+    }
+
   	string SelectedModel = "";
 
 	void SelectModel(ChangeEventArgs e)
     {
         SelectedModel = e.Value?.ToString() ?? "";
-    }
-
-  	string SelectedInput = "";
-	void SelectInput(ChangeEventArgs e)
-    {
-        SelectedInput = e.Value?.ToString() ?? "";
-    }
-
-  	string SelectedValidationInput = "";
-	void SelectValidationInput(ChangeEventArgs e)
-    {
-        SelectedValidationInput = e.Value?.ToString() ?? "";
     }
 }

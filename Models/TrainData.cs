@@ -47,7 +47,7 @@ public class TrainData {
 		var images = new List<string>();
 
 		foreach(string file in Directory.GetFiles(path)) {
-			string contentPath = $"/tmp/{name}/{Path.GetFileName(file)}";
+			string contentPath = $"/trainer/out/{name}/{Path.GetFileName(file)}";
 
 			if(file.EndsWith("Scaler.pkl")) {
 				scalers.Add(contentPath);

@@ -6,6 +6,34 @@
 <h1>Training: @Result.DateTime.ToString()</h1>
 
 
+@if(Result.TrainDataJson != null) {
+	
+	<p>This model is trained with features: @String.Join(", ", Result.TrainDataJson.Features)</p>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>R2</th>
+				<th>MAE</th>
+				<th>MSE</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var model in Result.TrainDataJson.Models) {
+				<tr>
+					<td>@model.name</td>
+					<td>@model.r2</td>
+					<td>@model.mae]</td>
+					<td>@model.mse</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -60,8 +88,8 @@
 @if(Result.Images != null) {
 	<div class="row">
 		@foreach(var line in Result.Images!) {
-		<div class="col">
-			<img src=@(line) />
+		<div class="col-md-6 col-xl-4">
+			<img class="w-100" src=@(line) />
 		</div>
 		}
 	</div>

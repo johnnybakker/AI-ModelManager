@@ -5,11 +5,20 @@
 
 <div class="container-fluid">
 
-<h1>Train a model</h1>
+<h1>Train models</h1>
+
+<div class="form-group mt-4">
+	<label>Naam:</label>
+	<input placeholder="Naam" @oninput="e => TrainNameChanged(e)" class="form-control @(string.IsNullOrEmpty(trainNameError) ? "" : "is-invalid")"/>
+	<div class="invalid-feedback">
+		@trainNameError
+    </div>
+</div>
 
 <div class="form-group mt-4">
 	<label>Model:</label>
 	<select @onchange="SelectModel" @attributes="ControlAttributes()" class="form-control">
+		<option value="all">All</option>
 		@foreach(var model in TrainService.ModelNames) {
 			<option value="@model">@model</option>
 		}

@@ -32,12 +32,11 @@ public class TrainService  {
 		}
 	}
 
-	public async Task Start(string model, Stream input, Stream validation) {
+	public async Task Start(string name, string model, Stream input, Stream validation) {
 
 		if(IsTraining)
 			return;
 
-		string name = DateTime.Now.Ticks.ToString();
 		TrainProcess = new(name, options.PythonPath, options.Path, model, input, validation, Path.Combine(OutputDirectory, name));
 		
 		TrainProcess.Exited += (obj, e) => 

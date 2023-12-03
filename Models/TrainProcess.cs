@@ -53,7 +53,7 @@ public class TrainProcess : IDisposable {
 			StartInfo = new()
 			{
 				FileName = pythonPath,
-				Arguments = $"-u ./scripts/train_one.py --input \"{InputPath}\" --output \"{OutputPath}\" --validation \"{ValidationPath}\" --models {Model}",
+				Arguments = $"-u ./scripts/train_one.py --input \"{InputPath}\" --output \"{OutputPath}\" --validation \"{ValidationPath}\" {(Model == "all" ? "" : "--models " + Model)}",
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,

@@ -1,13 +1,8 @@
 using HillsModelManager;
-using HillsModelManager.Database;
 using HillsModelManager.Services;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 //builder.Services.AddDbContext<TrainDBContext>(ServiceLifetime.Singleton);
 builder.Services.AddRazorPages();
@@ -15,13 +10,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<TrainService>();
 
 var app = builder.Build();
-
-// // Migrate latest database changes during startup
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<TrainDBContext>();
-//     dbContext.Database.Migrate();
-// }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -43,6 +31,7 @@ app.UseStaticFiles(new StaticFileOptions()
 		}
 	)
 });
+
 app.UseStaticFiles();
 
 app.UseRouting();

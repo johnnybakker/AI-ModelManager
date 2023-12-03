@@ -1,5 +1,7 @@
 using System.Data;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -11,6 +13,7 @@ public class TrainData {
 	
 	public string? Predictions;
 	private string? PredictionsPath;
+	private string? TrainDataPath;
 	
 	public DataTable GetPredictionTable() {
 		DataTable dt = new();
@@ -28,18 +31,31 @@ public class TrainData {
 		return dt;
 	}
 
+	private TrainDataJson? _trainData = null;
+	public TrainDataJson? TrainDataJson { 
+		get {		
+			if(_trainData != null) 
+				return _trainData;
+		
+			if(string.IsNullOrEmpty(TrainDataPath))
+				return null;
+
+			return _trainData = new TrainDataJson(TrainDataPath);
+		}
+	}
+
 	public IEnumerable<string> Models;
 	public IEnumerable<string> Scalers;
 	public IEnumerable<string> Images;
+	public string TrainPath { get; set; }
+	public string Name { get; set; }
 
 
 	public TrainData(string path) {
-		string name = Path.GetFileName(path);
+		TrainPath = path;
+		Name = Path.GetFileName(path);
 			
-		long ticks;
-		long.TryParse(name, out ticks);
-
-		DateTime = new(ticks);
+		DateTime = Directory.GetCreationTime(path);
 	
 
 		var models = new List<string>();
@@ -47,16 +63,17 @@ public class TrainData {
 		var images = new List<string>();
 
 		foreach(string file in Directory.GetFiles(path)) {
-			string contentPath = $"/trainer/out/{name}/{Path.GetFileName(file)}";
+			string contentPath = $"/trainer/out/{Name}/{Path.GetFileName(file)}";
 
 			if(file.EndsWith("Scaler.pkl")) {
 				scalers.Add(contentPath);
 			} else if(file.EndsWith(".pkl")) {
 				models.Add(contentPath);
-			} else if(file.EndsWith(".csv")) {
+			} else if(file.EndsWith("Predictions.csv")) {
 				Predictions = contentPath;
 				PredictionsPath = file;
-
+			}else if(file.EndsWith("train.json")) {
+				TrainDataPath = file;
 			} else if (file.EndsWith(".png")) {
 				images.Add(contentPath);
 			}

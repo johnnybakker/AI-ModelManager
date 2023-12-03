@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using HillsModelManager.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -59,13 +60,16 @@ public partial class Train : ComponentBase {
 		long size = DirSize(di);
 
 		if(size > MAX_SIZE) return;
-	
 
+		validateModelName();
+	
+		if(string.IsNullOrEmpty(trainName) || !string.IsNullOrEmpty(trainNameError)) return;
 		if(string.IsNullOrEmpty(SelectedModel)) return;
 		if(inputFile == null) return;
 		if(validationFile == null) return;
 
 		await TrainService.Start(
+			trainName,
 			SelectedModel, 
 			inputFile.OpenReadStream(MAX_SIZE), 
 			validationFile.OpenReadStream(MAX_SIZE)
@@ -75,6 +79,39 @@ public partial class Train : ComponentBase {
 	private void Stop()
     {
 		TrainService.Stop();
+	}
+
+	[Parameter]
+	public string? trainNameError {get; set; } = null; 
+
+	string? trainName = null;
+    private void TrainNameChanged(ChangeEventArgs e)
+    {
+		trainName = e.Value?.ToString();
+		validateModelName();
+		Console.WriteLine(trainNameError);
+    }
+
+	void validateModelName() {
+		
+		Regex trainNameRegex = new Regex("([a-zA-Z0-9\\-_])+");
+
+		if(string.IsNullOrEmpty(trainName)) {
+			trainNameError = "";
+			return;
+		}
+	
+		if(trainNameRegex.Match(trainName).Length != trainName.Length) {
+			trainNameError = "A train name may not contain spaces or special characters";
+			return;
+		}
+
+		if(Directory.Exists($"{TrainService.OutputDirectory}/{trainName}")) {
+			trainNameError = "A training with this name already exist"; 
+			return;
+		}
+
+		trainNameError = null;
 	}
 
 	IBrowserFile? inputFile = null;
@@ -99,4 +136,5 @@ public partial class Train : ComponentBase {
     {
         SelectedModel = e.Value?.ToString() ?? "";
     }
+
 }

@@ -2,8 +2,44 @@
 
 <PageTitle>Hills AI Dashboard</PageTitle>
 
-<NavMenu />
+@if(PinIsValid) {
 
-<main class="container-fluid mt-4">
-	@Body
-</main>
+	<NavMenu />
+
+	<main class="container-fluid mt-4">
+		@Body
+	</main>
+
+} else {
+
+	<div class="d-flex justify-content-center align-items-center flex-column" style="height: 500px;width: 500px;margin-left: auto;margin-right: auto;">
+		<div class="form-group w-100">
+			<h3>PIN</h3>
+			<InputText type="password" class="form-control"  @bind-Value=@PinString/>
+		</div>
+		<div class="btn btn-primary mt-4 d-block w-100" @onclick=OnPinInput>Login</div>
+	</div>
+
+}
+
+@code {
+
+	[Parameter]
+	public int Pin { get; set; } = -1;
+
+	[Parameter]
+	public string PinString { get; set; } = string.Empty;
+
+
+	public bool PinIsValid => Pin == 123456;
+
+	private void OnPinInput() {
+
+		int pin;
+		if(int.TryParse(PinString, out pin)) {
+			Pin = pin;
+		}
+
+	}
+
+}

@@ -55,15 +55,17 @@
 	}
 </div>
 
-<div class="form-group mt-4">
-	<h4>Output:</h4>
-	<code>
-		@if(TrainService.Output != null) {
-			@foreach(var line in TrainService.Output!) {
-				<span>@line<br/></span>
+	<div class="form-group mt-4">
+		<h4>Output:</h4>
+		<code>
+			@if(TrainService.Output != null) {
+				const int MAX_LINES = 15;
+				int i = TrainService.Output.Count > MAX_LINES ? TrainService.Output.Count - MAX_LINES : 0;
+				@for(; i < TrainService.Output.Count; i++){
+					<span>@TrainService.Output[i]<br/></span>
+				}
 			}
-		}
-	</code>
-</div>
+		</code>
+	</div>
 
 </div>

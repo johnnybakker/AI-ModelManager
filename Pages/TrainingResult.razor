@@ -3,13 +3,20 @@
 
 <PageTitle>Result</PageTitle>
 
-<h1>Training: @Result.DateTime.ToString()</h1>
-
+<div class="row">
+	<div class="col-12">
+		<h1>Training: @Result.DateTime.ToString()</h1>
+	</div>
+</div>
 
 @if(Result.TrainDataJson != null) {
-	
+<div class="row">
+	<div class="col-12">
 	<p>This model is trained with features: @String.Join(", ", Result.TrainDataJson.Features)</p>
-
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 o-auto">
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -30,10 +37,13 @@
 			}
 		</tbody>
 	</table>
+	</div>
+</div>
 }
 
 
-
+<div class="row">
+	<div class="col-12 o-auto">
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -53,8 +63,9 @@
 		}
 	</tbody>
 </table>
+	</div>
+</div>
 
-<div class="container-fluid">
 
 	<div class="row mt-4">
 
@@ -94,5 +105,3 @@
 		}
 	</div>
 }
-
-</div>

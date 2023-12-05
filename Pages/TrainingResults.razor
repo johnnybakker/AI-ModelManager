@@ -11,9 +11,9 @@
 
 		<tr>
 			<th>Name</th>
-			<th>Date</th>
-			<th>Model</th>
-			<th>Predictions</th>
+			<th class="d-none d-md-table-cell">Date</th>
+			<th class="d-none d-lg-table-cell">Model</th>
+			<th class="d-none d-md-table-cell">Predictions</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -23,18 +23,18 @@
 				<td>
 					@result.Name
 				</td>
-				<td>
-					@result.DateTime.ToString()
+				<td class="d-none d-md-table-cell text-nowrap">
+					@result.DateTime.ToShortDateString() @result.DateTime.ToShortTimeString()
 				</td>
-				<td>
+				<td class="d-none d-lg-table-cell">
 					@foreach(var model in result.Models) {
 						<a href="@model" download="" class="btn btn-link btn-sm">@Path.GetFileNameWithoutExtension(model)</a>
 					}
 				</td>				
-				<td>
+				<td class="d-none d-md-table-cell">
 					<a href="@result.Predictions" download="" class="btn btn-link btn-sm">@Path.GetFileNameWithoutExtension(result.Predictions)</a>
 				</td>
-				<td>
+				<td class="text-end text-nowrap">
 					<a href="/Result/@result.Name" class="btn btn-primary btn-sm">Open</a>
 					<div @onclick="@(async ()=> await DeleteResult(result.Name))" class="btn btn-danger btn-sm">Delete</div>
 				</td>

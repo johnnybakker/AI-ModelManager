@@ -130,7 +130,7 @@ public partial class Train : ComponentBase {
 		Console.WriteLine(validationFile.Name);
     }
 
-  	string SelectedModel = "";
+  	string SelectedModel = "all";
 
 	void SelectModel(ChangeEventArgs e)
     {

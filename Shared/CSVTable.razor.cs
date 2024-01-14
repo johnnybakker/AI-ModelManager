@@ -28,6 +28,8 @@ partial class CSVTable : ComponentBase {
 	private string[]? csvColumns = null;
 	private LinkedList<List<dynamic>> csvPages = new();
 
+	public ElementReference TableElement { get; set; } = default!;
+
 	protected override async Task OnInitializedAsync()
 	{	
 		csvFile = new(Path);

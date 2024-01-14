@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using HillsModelManager;
 using HillsModelManager.Services;
 using Microsoft.AspNetCore.StaticFiles;
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<TrainService>();
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 

@@ -26,20 +26,29 @@
 
 @code {
 
-	[Parameter]
+	[Inject]
+	Blazored.LocalStorage.ILocalStorageService localStorage {get; set;} = default!;
+
 	public int Pin { get; set; } = -1;
 
 	[Parameter]
 	public string PinString { get; set; } = string.Empty;
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		Pin = await localStorage.GetItemAsync<int>("PIN");
+		await base.OnAfterRenderAsync(firstRender);
+		StateHasChanged();
+	}
 
-	public bool PinIsValid => Pin == 123456;
+		public bool PinIsValid => Pin == 123456;
 
-	private void OnPinInput() {
+	private async void OnPinInput() {
 
 		int pin;
 		if(int.TryParse(PinString, out pin)) {
 			Pin = pin;
+			await localStorage.SetItemAsync<int>("PIN", Pin);
 		}
 
 	}

@@ -32,8 +32,15 @@
 
 	<script>
 		function resetValue(element) {
-			console.log(element);
 			element.value = null;
+		}
+
+		function scrollTo(element) {
+			if(element) element.scrollIntoView({
+				behavior: "smooth",
+				block: "center", 
+				inline: "nearest"
+			});
 		}
 	</script>
 	

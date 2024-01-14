@@ -4,6 +4,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using HillsModelManager.Models;
 using HillsModelManager.Services;
+using HillsModelManager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -36,6 +37,7 @@ partial class Predict : ComponentBase {
 	private string? PredictionResult = null;
 	private string? PredictionResultUrl = null;
 
+	public CSVTable ResultTable { get; set; } = default!;
 
 	public IEnumerable<string> TrainingPaths => 
 		Directory.GetDirectories(TrainService.OutputDirectory)
@@ -75,16 +77,19 @@ partial class Predict : ComponentBase {
 			Console.WriteLine($"Progress: {msg}");
 		};
 
-		PredictProcess.Ended += (obj, msg) => InvokeAsync(() => {
+		PredictProcess.Ended += (obj, msg) => InvokeAsync(async () => {
 			string predictions = Path.Combine(msg.outputPath, "Predictions.csv");
 	
 			PredictionResultUrl = predictions.Replace(TrainService.OutputDirectory, TrainService.OutputUrl);
 			PredictionResult = predictions;
 			PredictProcess = null;	
 			StateHasChanged();
+
+			await Task.Delay(100);
+			await JS.InvokeVoidAsync("scrollTo", ResultTable.TableElement);
 		});
 
-		string trainingPath = @"C:\Studie\Module - Artificial Intelligence\HillsLIWCase\out\Dienten-zonder-density-all";
+		string trainingPath = SelectedTraining;
 		DirectoryInfo trainingDirectory = new(trainingPath);
 
 		await PredictProcess.Start(trainingDirectory, InputStream, new string[]{ "all" });

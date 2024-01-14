@@ -51,6 +51,20 @@ public class TrainService  {
 		await TrainProcess.Start();
 	}
 
+	public PredictProcess CreatePredictProcess(string name, string model, Stream input) {		
+		
+		string trainerPath = options.Path;
+		string predictScriptPath = Path.Combine(trainerPath, "scripts", "predict.py");
+		FileInfo predictScriptFile = new FileInfo(predictScriptPath);
+
+		var predictProcess = new PredictProcess(
+			predictScriptFile,
+			options.PythonPath
+		);
+
+		return predictProcess;
+	}
+
 	public void Stop() {
 
 		if(TrainProcess == null)

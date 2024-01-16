@@ -41,30 +41,7 @@
 </div>
 }
 
-
-<div class="row">
-	<div class="col-12 overflow-auto">
-<table class="table table-striped">
-	<thead>
-		<tr>
-            @foreach(System.Data.DataColumn col in PredictionTable.Columns) {
-                <th>@col.ColumnName</th>
-			}
-		</tr>
-	</thead>
-	<tbody>
-
-		@for(int i = 0; i < (PredictionTable.Rows.Count > 10 ? 10 : PredictionTable.Rows.Count); i++) {
-			<tr>
-				@foreach(System.Data.DataColumn col in PredictionTable.Columns) {
-					<td>@PredictionTable.Rows[i][col]</td>
-				}
-			</tr>
-		}
-	</tbody>
-</table>
-	</div>
-</div>
+<CSVTable Path="@Result.PredictionsPath" Page="0" Rows="10"></CSVTable>
 
 
 	<div class="row mt-4">

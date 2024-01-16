@@ -10,6 +10,7 @@
 			<div class="form-group mt-4">
 				<label>Training:</label>
 				<select class="form-control" @onchange="OnTrainingChanged">
+					<option value="">-- Select training --</option>
 					@foreach(var p in TrainingPaths){
 						<option value="@p">@Path.GetFileNameWithoutExtension(p)</option>
 					}
@@ -17,24 +18,34 @@
 			</div>	
 
 			<div class="form-group mt-4">
+		
 				<label>Dataset:</label>
-				<InputFile @ref=datasetInput class="form-control" accept=".csv" OnChange="@OnInputDataset" />
-			</div>
+				<InputFile @ref=datasetInput disabled class="@datasetInputClass" accept=".csv" OnChange="@OnInputDataset" />
+				
+				@if(missingFeatures.Count() > 0) {
+					<div class="invalid-feedback">
+						Dataset is missing features: @string.Join(", ", missingFeatures)
+					</div>
+					<div class="btn btn-primary mt-2 disabled" disabled="disabled">Predict</div>
+				} else {
+					@if(InputStream == null) {
+						<div class="d-flex mt-2 align-items-center">
+							<div class="btn btn-primary disabled" disabled="disabled">Predict</div>
+							@if(PredictProcess != null) {
+								<div class="mx-2" style="font-size: 16pt">
+									<i class="fa-solid fa-spinner fa-spin-pulse"></i>
+								</div>
+							} else {
 
-			@if(InputStream == null) {
-				<div class="d-flex mt-2 align-items-center">
-					<div class="btn btn-primary disabled" disabled="disabled">Predict</div>
-					@if(PredictProcess != null) {
-						<div class="mx-2" style="font-size: 16pt">
-							<i class="fa-solid fa-spinner fa-spin-pulse"></i>
+							}
 						</div>
 					} else {
-
+						<div class="btn btn-primary mt-2" @onclick="predict">Predict</div>
 					}
-				</div>
-			} else {
-				<div class="btn btn-primary mt-2" @onclick="predict">Predict</div>
-			}
+				}
+			
+			</div>
+			
 
 			<hr/>
 

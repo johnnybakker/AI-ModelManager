@@ -44,7 +44,6 @@ partial class CSVTable : ComponentBase {
 	}
 
 	private void SetPage(int page) {
-		Console.WriteLine(page);
 		Page = page;
 		StateHasChanged();
 	}

@@ -2,17 +2,23 @@
 
 <PageTitle>Hills AI Dashboard</PageTitle>
 
+@if(DisableOverlay == false) {
+	<div class="@OverlayClass">
+		<h2 style="margin-left: 40px;">Loading... <img class="fa-flip" style="width: 40px;" src="/img/logo.webp"></h2>		
+	</div>
+}
+
 @if(PinIsValid) {
 
-	<NavMenu />
+	<NavMenu Hide=@(DisableOverlay == false) />
 
-	<main class="container-fluid mt-4">
+	<main class="@MainClass container-fluid mt-4">
 		@Body
 	</main>
 
 } else {
 
-	<div class="container-fluid d-flex justify-content-center align-items-center flex-column" style="height: 500px;width: 500px;margin-left: auto;margin-right: auto;padding-top:10em;">
+	<main class="@MainClass container-fluid d-flex justify-content-center align-items-center flex-column" style="height: 500px;width: 500px;margin-left: auto;margin-right: auto;padding-top:10em;">
 		<img src="/img/logo.webp"/>
 		
 		<div class="form-group w-100 mt-5">
@@ -20,11 +26,20 @@
 			<InputText type="password" class="form-control"  @bind-Value=@PinString/>
 		</div>
 		<div class="btn btn-primary mt-4 d-block w-100" @onclick=OnPinInput>Login</div>
-	</div>
+	</main>
 
 }
 
 @code {
+
+	[Parameter]
+	public bool DisableOverlay { get; set; } = false;
+	public bool HideOverlay { get; set; } = false;
+	
+	public string MainClass => DisableOverlay ? "loaded" : "";
+
+
+	public string OverlayClass => "overlay" + (HideOverlay ? " hide" : "");
 
 	[Inject]
 	Blazored.LocalStorage.ILocalStorageService localStorage {get; set;} = default!;
@@ -36,8 +51,14 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		await Task.Delay(1000);
 		Pin = await localStorage.GetItemAsync<int>("PIN");
+		HideOverlay = true;
 		await base.OnAfterRenderAsync(firstRender);
+		StateHasChanged();
+
+		await Task.Delay(1000);
+		DisableOverlay = true;
 		StateHasChanged();
 	}
 

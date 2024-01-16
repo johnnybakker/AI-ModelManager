@@ -8,6 +8,7 @@ using HillsModelManager.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.JSInterop;
 
 namespace HillsModelManager.Pages;
@@ -23,12 +24,35 @@ partial class Predict : ComponentBase {
 
 
 	private InputFile datasetInput = null!;
+	private string datasetInputClass => 
+		$"form-control disabled {
+			(missingFeatures.Count() > 0 ? "is-invalid" : "")
+		} {
+			(string.IsNullOrEmpty(SelectedTraining) ? "disabled" : "") 
+		}";
+
+	private IEnumerable<string> missingFeatures = new string[0];
 
 	public PredictProcess? PredictProcess { get; set; } = null;
 
 	private string[]? Columns;
-	private string SelectedTraining = default!;
-	private Stream? InputStream = null;
+
+	private string _selectedTraining = default!;
+	private string SelectedTraining {
+		get => _selectedTraining;
+		set {
+			_selectedTraining = value;
+		}
+	}
+	
+	private Stream? _inputStream = null;
+	private Stream? InputStream { 
+		get => _inputStream; 
+		set {
+			_inputStream = value;
+			missingFeatures = MissingFeatures;
+		}
+	}
 
 	const long MAX_SIZE = (1024L * 1024L * 1024L * 10L);
 
@@ -53,10 +77,53 @@ partial class Predict : ComponentBase {
 		return base.OnInitializedAsync();
 	}
 
-	protected void OnTrainingChanged(ChangeEventArgs e) 
+	private TrainData? _trainData = null;
+	public TrainData? TrainData { 
+		get => _trainData; 
+		set {
+			_trainData = value;
+			missingFeatures = MissingFeatures;
+		}
+	}
+
+	public IEnumerable<string> MissingFeatures {
+		get {
+			if(TrainData == null) {
+				return new string[0];
+			}
+
+			if(TrainData.TrainDataJson == null || Columns == null) {
+				return new string[0];
+			}
+
+			List<string> missingFeatures = new List<string>();
+			foreach(string feature in TrainData.TrainDataJson.Features) {
+				if(!Columns.Contains(feature)) 
+					missingFeatures.Add(feature);
+			}
+
+			return missingFeatures;
+		}
+	}
+
+	protected async void OnTrainingChanged(ChangeEventArgs e) 
 	{
-		Console.WriteLine(e.Value);
 		SelectedTraining = e.Value?.ToString() ?? "";
+
+		string? disabledAttr = await JS.InvokeAsync<string?>("getAttr", datasetInput.Element, "disabled");
+
+		if(disabledAttr == null && string.IsNullOrEmpty(SelectedTraining)) {
+			await JS.InvokeVoidAsync("addAttr", datasetInput.Element, "disabled", "disabled");
+		} else if(disabledAttr != null && !string.IsNullOrEmpty(SelectedTraining)) {
+			await JS.InvokeVoidAsync("removeAttr", datasetInput.Element, "disabled");
+		}
+
+		if(string.IsNullOrEmpty(SelectedTraining)) {
+			TrainData = null;
+			return;
+		}
+
+		TrainData = new TrainData(SelectedTraining);
 	}
 
 	protected async void predict() 

@@ -37,7 +37,7 @@ public partial class Train : ComponentBase {
 
 	protected override Task OnInitializedAsync()
 	{
-		SelectedModel = TrainService.ModelNames.FirstOrDefault() ?? "";
+		SelectedModel = "all";
 		validationFile = null;
 		inputFile = null;
 
@@ -62,11 +62,15 @@ public partial class Train : ComponentBase {
 		if(size > MAX_SIZE) return;
 
 		validateModelName();
+
+		Console.WriteLine(SelectedModel);
 	
 		if(string.IsNullOrEmpty(trainName) || !string.IsNullOrEmpty(trainNameError)) return;
 		if(string.IsNullOrEmpty(SelectedModel)) return;
 		if(inputFile == null) return;
 		if(validationFile == null) return;
+
+
 
 		await TrainService.Start(
 			trainName,
@@ -89,7 +93,6 @@ public partial class Train : ComponentBase {
     {
 		trainName = e.Value?.ToString();
 		validateModelName();
-		Console.WriteLine(trainNameError);
     }
 
 	void validateModelName() {
@@ -118,22 +121,19 @@ public partial class Train : ComponentBase {
     private void LoadInputFile(InputFileChangeEventArgs e)
     {
 		inputFile = e.File;
-		Console.WriteLine(inputFile.Size);
-		Console.WriteLine(inputFile.Name);
     }
 
 	IBrowserFile? validationFile = null;
     private void LoadValidationFile(InputFileChangeEventArgs e)
     {
 		validationFile = e.File;
-		Console.WriteLine(validationFile.Size);
-		Console.WriteLine(validationFile.Name);
     }
 
   	string SelectedModel = "all";
 
 	void SelectModel(ChangeEventArgs e)
     {
+		Console.WriteLine(new System.Diagnostics.StackTrace());
         SelectedModel = e.Value?.ToString() ?? "";
     }
 

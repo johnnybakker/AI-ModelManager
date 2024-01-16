@@ -35,6 +35,22 @@
 			element.value = null;
 		}
 
+		function setAttr(element, name, value) {
+			element.setAttribute(name, value)
+		}
+
+		function getAttr(element, name) {
+			return element.getAttribute(name)
+		}
+
+		function removeAttr(element, name) {
+			element.removeAttribute(name)
+		}
+
+		function addAttr(element, name, value) {
+			element.setAttribute(name, value)
+		}
+
 		function scrollTo(element) {
 			if(element) element.scrollIntoView({
 				behavior: "smooth",

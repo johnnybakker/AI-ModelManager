@@ -12,7 +12,7 @@ public class TrainData {
 	public readonly DateTime DateTime;
 	
 	public string? Predictions;
-	private string? PredictionsPath;
+	public readonly string? PredictionsPath;
 	private string? TrainDataPath;
 	
 	public DataTable GetPredictionTable() {

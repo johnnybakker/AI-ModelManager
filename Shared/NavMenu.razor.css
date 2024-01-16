@@ -1,0 +1,8 @@
+nav.hide {
+	opacity: 0;
+}
+
+nav {
+	opacity: 1;
+	transition: opacity 0.5s;
+}
